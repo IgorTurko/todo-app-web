@@ -1,24 +1,31 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import * as C from '@chakra-ui/react';
+
+import { createStandaloneToast, extendTheme } from '@chakra-ui/react';
+
+const theme = {
+  config: {
+    initialColorMode: 'light',
+    useSystemColorMode: false,
+  },
+};
+
+const extendedTheme = extendTheme(theme);
+
+export function MainContainer() {
+  const { ToastContainer } = createStandaloneToast({ theme: extendedTheme });
+
+  return (
+    <>
+      <ToastContainer />
+    </>
+  );
+}
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer">
-          Learn React
-        </a>
-      </header>
-    </div>
+    <C.ChakraProvider theme={extendedTheme}>
+      <MainContainer />
+    </C.ChakraProvider>
   );
 }
 
