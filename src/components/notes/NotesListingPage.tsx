@@ -1,6 +1,7 @@
 import * as C from '@chakra-ui/react';
 import { useAsync } from 'react-async';
 import { fetchNotes } from '../clients/api';
+import NoteItem from './NoteItem';
 
 const NotesListingPage = () => {
   const { data, isPending, error } = useAsync({ promiseFn: fetchNotes });
@@ -17,7 +18,7 @@ const NotesListingPage = () => {
           <div>Notes:</div>
           <C.Stack pl={6} mt={1} spacing={1}>
             {data.map((note) => (
-              <div>{note.text}</div>
+              <NoteItem id={note.id} text={note.text} checked={note.status === 'done'} />
             ))}
           </C.Stack>
         </>
