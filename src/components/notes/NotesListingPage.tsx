@@ -1,25 +1,40 @@
 import * as C from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
 import { useAsync } from 'react-async';
-import { fetchNotes } from '../clients/api';
+import { fetchNotes, NoteItemType } from '../clients/api';
 import NoteItem from './NoteItem';
 import AlertBox from '../alert-box/AlertBox';
 
 const NotesListingPage = () => {
   const { data, isPending, error } = useAsync({ promiseFn: fetchNotes });
+  const [notes, setNotes] = useState<NoteItemType[] | undefined>(undefined);
+
+  useEffect(() => {
+    setNotes(data);
+  }, [data]);
 
   let content;
   if (error) {
     <AlertBox status="error">{`Failed to fetch notes: ${error.message}`}</AlertBox>;
   } else if (isPending) {
     content = <C.Spinner />;
-  } else if (data) {
+  } else if (notes) {
     content =
-      data.length > 0 ? (
+      notes.length > 0 ? (
         <>
           <div>Notes:</div>
           <C.Stack pl={6} mt={1} spacing={1}>
-            {data.map((note) => (
-              <NoteItem id={note.id} text={note.text} checked={note.status === 'done'} />
+            {notes.map((note) => (
+              <NoteItem
+                key={note.id}
+                id={note.id}
+                text={note.text}
+                status={note.status}
+                onChange={(newNote) => {
+                  const newNotes = notes.map((note) => (note.id === newNote.id ? newNote : note));
+                  setNotes(newNotes);
+                }}
+              />
             ))}
           </C.Stack>
         </>

@@ -17,7 +17,7 @@ export const NoteItem = t.type({
 });
 
 export type NoteItemType = t.TypeOf<typeof NoteItem>;
-type NoteStatusType = t.TypeOf<typeof NoteStatus>;
+export type NoteStatusType = t.TypeOf<typeof NoteStatus>;
 
 function delay(time: number) {
   return new Promise((resolve) => setTimeout(resolve, time));

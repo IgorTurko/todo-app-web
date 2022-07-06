@@ -13,4 +13,4 @@ const Template: Story<ComponentProps<typeof NoteItem>> = (args) => (
 );
 
 export const NoteItemStory = Template.bind({});
-NoteItemStory.args = { id: 'foo', text: 'Text 1', checked: true };
+NoteItemStory.args = { id: 'foo', text: 'Text 1', status: 'pending' };
