@@ -2,7 +2,7 @@ import * as C from '@chakra-ui/react';
 import { createStandaloneToast, extendTheme } from '@chakra-ui/react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import ToDoPage from './components/ToDoPage';
+import NotesListingPage from './components/notes/NotesListingPage';
 
 const theme = {
   config: {
@@ -20,7 +20,7 @@ export function MainContainer() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<ToDoPage />}></Route>
+          <Route path="/" element={<NotesListingPage />}></Route>
         </Routes>
       </BrowserRouter>
       <ToastContainer />
