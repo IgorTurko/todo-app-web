@@ -1,4 +1,4 @@
-import { fetchNotes } from './api';
+import { fetchNotes, changeNoteStatus } from './api';
 
 beforeEach(() => {
   localStorage.clear();
@@ -44,6 +44,60 @@ describe('fetchNotes', () => {
 
     await expect(fetchNotes()).rejects.toEqual(
       new Error("List notes API did not return anything or didn't return an array")
+    );
+  });
+});
+
+describe('changeNoteStatus', () => {
+  test('should change note status', async () => {
+    const id = 'abc';
+    const newStatus = 'pending';
+    const notes = [
+      {
+        id: id,
+        text: 'note abc',
+        status: 'done',
+      },
+    ];
+
+    localStorage.setItem('notes', JSON.stringify(notes));
+
+    await expect(changeNoteStatus(id, newStatus)).resolves.toEqual({
+      ...notes[0],
+      status: newStatus,
+    });
+  });
+
+  test('should return error if note is not found', async () => {
+    const newStatus = 'pending';
+    const notes = [
+      {
+        id: 'abc',
+        text: 'note abc',
+        status: 'done',
+      },
+    ];
+
+    localStorage.setItem('notes', JSON.stringify(notes));
+
+    await expect(changeNoteStatus('ab', newStatus)).rejects.toEqual(new Error('Note not found'));
+  });
+
+  test('should return error if status is wrong', async () => {
+    const id = 'abc';
+    const newStatus = 'done';
+    const notes = [
+      {
+        id: id,
+        text: 'note abc',
+        status: 'done',
+      },
+    ];
+
+    localStorage.setItem('notes', JSON.stringify(notes));
+
+    await expect(changeNoteStatus(id, newStatus)).rejects.toEqual(
+      new Error('New note status must be different from the old')
     );
   });
 });

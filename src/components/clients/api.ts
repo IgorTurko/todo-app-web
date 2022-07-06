@@ -8,13 +8,16 @@ const DEFAULT_NOTES = [
   { id: 'foo2', text: 'foo2', status: 'done' },
 ];
 
+const NoteStatus = t.union([t.literal('pending'), t.literal('done')]);
+
 export const NoteItem = t.type({
   id: t.string,
   text: t.string,
-  status: t.union([t.literal('pending'), t.literal('done')]),
+  status: NoteStatus,
 });
 
 export type NoteItemType = t.TypeOf<typeof NoteItem>;
+type NoteStatusType = t.TypeOf<typeof NoteStatus>;
 
 function delay(time: number) {
   return new Promise((resolve) => setTimeout(resolve, time));
@@ -52,4 +55,26 @@ export async function fetchNotes(): Promise<NoteItemType[]> {
   });
 
   return notesDecoded;
+}
+
+export async function changeNoteStatus(
+  noteId: string,
+  newStatus: NoteStatusType
+): Promise<NoteItemType> {
+  const notes = await fetchNotes();
+  const note = notes.find((note) => note.id === noteId);
+
+  if (!note) {
+    throw new Error('Note not found');
+  }
+
+  if (note.status === newStatus) {
+    throw new Error('New note status must be different from the old');
+  }
+
+  note.status = newStatus;
+
+  localStorage.setItem('notes', JSON.stringify(notes));
+
+  return note;
 }
