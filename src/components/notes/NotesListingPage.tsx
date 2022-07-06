@@ -2,13 +2,14 @@ import * as C from '@chakra-ui/react';
 import { useAsync } from 'react-async';
 import { fetchNotes } from '../clients/api';
 import NoteItem from './NoteItem';
+import AlertBox from '../alert-box/AlertBox';
 
 const NotesListingPage = () => {
   const { data, isPending, error } = useAsync({ promiseFn: fetchNotes });
 
   let content;
   if (error) {
-    console.error('Something went wrong', error);
+    <AlertBox status="error">{`Failed to fetch notes: ${error.message}`}</AlertBox>;
   } else if (isPending) {
     content = <C.Spinner />;
   } else if (data) {
@@ -23,7 +24,7 @@ const NotesListingPage = () => {
           </C.Stack>
         </>
       ) : (
-        <div>Notes were not found</div>
+        <AlertBox status="info">Notes were not found</AlertBox>
       );
   }
 
